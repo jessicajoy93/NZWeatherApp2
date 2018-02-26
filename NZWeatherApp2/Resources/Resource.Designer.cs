@@ -28,6 +28,22 @@ namespace NZWeatherApp2
 		{
 		}
 		
+		public partial class Array
+		{
+			
+			// aapt resource value: 0x7f040000
+			public const int place_array = 2130968576;
+			
+			static Array()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Array()
+			{
+			}
+		}
+		
 		public partial class Attribute
 		{
 			
@@ -44,20 +60,23 @@ namespace NZWeatherApp2
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f040004
-			public const int AllText = 2130968580;
+			// aapt resource value: 0x7f050005
+			public const int AllText = 2131034117;
 			
-			// aapt resource value: 0x7f040000
-			public const int GetWeatherButton = 2130968576;
+			// aapt resource value: 0x7f050000
+			public const int GetWeatherButton = 2131034112;
 			
-			// aapt resource value: 0x7f040001
-			public const int ResultsTitle = 2130968577;
+			// aapt resource value: 0x7f050001
+			public const int ResultsTitle = 2131034113;
 			
-			// aapt resource value: 0x7f040002
-			public const int TempText = 2130968578;
+			// aapt resource value: 0x7f050003
+			public const int TempText = 2131034115;
 			
-			// aapt resource value: 0x7f040003
-			public const int scrollView1 = 2130968579;
+			// aapt resource value: 0x7f050004
+			public const int scrollView1 = 2131034116;
+			
+			// aapt resource value: 0x7f050002
+			public const int spCity = 2131034114;
 			
 			static Id()
 			{
@@ -90,6 +109,9 @@ namespace NZWeatherApp2
 			
 			// aapt resource value: 0x7f030000
 			public const int app_name = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int place_prompt = 2130903041;
 			
 			static String()
 			{

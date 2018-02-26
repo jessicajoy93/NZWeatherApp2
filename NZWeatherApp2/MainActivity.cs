@@ -14,6 +14,7 @@ namespace NZWeatherApp2
         public string URL { get; set; }
         private Button btnGetWeather;
         private string TempText;
+        public string City;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -26,18 +27,20 @@ namespace NZWeatherApp2
             btnGetWeather = FindViewById<Button>(Resource.Id.GetWeatherButton);
             //When you click the button
             btnGetWeather.Click += btnGetWeather_Click;
+            SpinnerSetup();
         }
 
         private void btnGetWeather_Click(object sender, EventArgs e)
         {
             //Create the URL - we can change this later for other places
-            URL = "http://m.metservice.com/towns/christchurch";
-            //URL = "http://m.metservice.com/towns/" + City;
+            //URL = "http://m.metservice.com/towns/christchurch";
+            URL = "http://m.metservice.com/towns/" + City;
             //run the method that dl's the temp
             ConnectToNetAndDLTemp();
             //change the text on the button, so that you know something has happened
 
-            btnGetWeather.Text = "Christchurch"; ;
+            //btnGetWeather.Text = "Christchurch";
+            btnGetWeather.Text = City.ToUpper();
         }
 
         private void ConnectToNetAndDLTemp()
@@ -66,12 +69,37 @@ namespace NZWeatherApp2
 
             //Pass the Temp to the TempText TextView
             var Temp = StrMetService.Substring(intTempLeft, intTempRight);
-            TempText = Temp + " " + "c";
+            TempText = Temp + " " + "°C";
             FindViewById<TextView>(Resource.Id.TempText).Text = TempText;
             //FindViewById<TextView>(Resource.Id.AllText).Text = StrMetService;
             //Run the Image code, and pass the image to the ImageView
             //var imageBitmap = GetImageBitmapFromUrl(ExtractImagePath());
             //myImageView.SetImageBitmap(imageBitmap);
+        }
+
+        private void SpinnerSetup()
+        {
+            //https://developer.xamarin.com/guides/android/user_interface/spinner/
+            //tie in the spinner 
+            var spinner = FindViewById<Spinner>(Resource.Id.spCity);
+            //tie it to the method. 
+            spinner.ItemSelected += spinner_ItemSelected;
+            //The CreateFromResource() method then creates a new ArrayAdapter, which binds each item in the string array to the initial appearance for the Spinner (which is how each item will appear in the spinner when selected).
+            var arrayadapter = ArrayAdapter.CreateFromResource(this, Resource.Array.place_array, Android.Resource.Layout.SimpleSpinnerItem);
+            //SetDropDownViewResource is called to define the appearance for each item when the widget is opened (SimpleSpinItem is another standard layout defined by the platform)
+            arrayadapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            //Finally, the ArrayAdapter is set to associate all of its items with the Spinner by setting the Adapter property 
+            spinner.Adapter = arrayadapter;
+        }
+
+        private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            var spinner = (Spinner)sender; //make a fake spinner and send through the data to it
+            City = spinner.GetItemAtPosition(e.Position).ToString();
+            City = City.ToLower(); //make it lower case for the URL to work
+            //make a string to hold the city name so it appears in the toast message
+            var toast = string.Format("The city is {0}", spinner.GetItemAtPosition(e.Position));
+            Toast.MakeText(this, toast, ToastLength.Long).Show();
         }
     }
 }
