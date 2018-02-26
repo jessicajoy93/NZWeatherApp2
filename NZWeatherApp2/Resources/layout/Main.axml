@@ -4,37 +4,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout1">
+        <TextView
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/txtCity"
+            android:layout_weight="100"
+            android:background="@android:color/darker_gray" />
+        <Spinner
+            android:prompt="@string/place_prompt"
+            android:id="@+id/spCity"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="25"
+            android:background="@android:color/darker_gray" />
+    </LinearLayout>
     <Button
         android:text="Get Weather"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/GetWeatherButton"
-        android:layout_marginLeft="10dp" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <TextView
-        android:text="Current Weather"
+        android:text="Current Temperature"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ResultsTitle"
         android:textColor="@android:color/black"
         android:visibility="visible"
         android:layout_marginLeft="25px"
-        android:textSize="20dp" />
-    <Spinner
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/place_prompt"
-        android:id="@+id/spCity"
-        android:background="@android:color/darker_gray"
-        android:layout_marginBottom="26.5dp"
-        android:layout_marginTop="0.0dp" />
+        android:textSize="20dp"
+        android:textAlignment="center" />
     <TextView
-        android:text="Large Text"
+        android:text="aaa"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/TempText"
         android:textColor="@android:color/holo_blue_dark"
-        android:background="@android:color/background_dark" />
+        android:background="@android:color/background_dark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textAlignment="center" />
     <ScrollView
         android:minWidth="25px"
         android:minHeight="25px"
@@ -46,7 +61,6 @@
             android:text="Text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/AllText"
-            android:scrollbars="vertical" />
+            android:id="@+id/textView2" />
     </ScrollView>
 </LinearLayout>

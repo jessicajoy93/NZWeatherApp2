@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using Android.App;
 using Android.Widget;
@@ -6,7 +7,7 @@ using Android.OS;
 
 namespace NZWeatherApp2
 {
-    [Activity(Label = "NZWeatherApp", MainLauncher = true)]
+    [Activity(Label = "NZ Weather App", MainLauncher = true)]
     public class MainActivity : Activity
     {
         private ImageView myImageView;
@@ -15,6 +16,8 @@ namespace NZWeatherApp2
         private Button btnGetWeather;
         private string TempText;
         public string City;
+        private TextView TextCity;
+
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -25,6 +28,7 @@ namespace NZWeatherApp2
             //myImageView = FindViewById<ImageView>(Resource.Id.Image);
             //Tie in the Button, and create a Click event for using a delegate (Not the old fashioned way, but MS likes it. )
             btnGetWeather = FindViewById<Button>(Resource.Id.GetWeatherButton);
+            TextCity = FindViewById<TextView>(Resource.Id.txtCity);
             //When you click the button
             btnGetWeather.Click += btnGetWeather_Click;
             SpinnerSetup();
@@ -40,7 +44,8 @@ namespace NZWeatherApp2
             //change the text on the button, so that you know something has happened
 
             //btnGetWeather.Text = "Christchurch";
-            btnGetWeather.Text = City.ToUpper();
+            //btnGetWeather.Text = City.ToUpper();
+            TextCity.Text = City.ToUpper();
         }
 
         private void ConnectToNetAndDLTemp()
@@ -50,7 +55,8 @@ namespace NZWeatherApp2
             var webclient = new WebClient(); //Make a webclient to dl stuff
             webclient.DownloadStringAsync(webaddress); //dl the website as a string
             //Pink color means its an event
-            webclient.DownloadStringCompleted += webclient_DownloadStringCompleted; //Connect a method to the run when the DL is finished,
+            webclient.DownloadStringCompleted +=
+                webclient_DownloadStringCompleted; //Connect a method to the run when the DL is finished,
         }
 
         private void webclient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
@@ -69,7 +75,15 @@ namespace NZWeatherApp2
 
             //Pass the Temp to the TempText TextView
             var Temp = StrMetService.Substring(intTempLeft, intTempRight);
-            TempText = Temp + " " + "°C";
+
+            //read in the Old temp if it exists 
+            string OldTemp = ReadText("Temperature.txt");
+
+            TempText = Temp + " " + "°C" + " Old Temp " + OldTemp + "°C";
+
+            //save the new temp 
+            SaveText("Temperature.txt", Temp);
+
             FindViewById<TextView>(Resource.Id.TempText).Text = TempText;
             //FindViewById<TextView>(Resource.Id.AllText).Text = StrMetService;
             //Run the Image code, and pass the image to the ImageView
@@ -85,7 +99,8 @@ namespace NZWeatherApp2
             //tie it to the method. 
             spinner.ItemSelected += spinner_ItemSelected;
             //The CreateFromResource() method then creates a new ArrayAdapter, which binds each item in the string array to the initial appearance for the Spinner (which is how each item will appear in the spinner when selected).
-            var arrayadapter = ArrayAdapter.CreateFromResource(this, Resource.Array.place_array, Android.Resource.Layout.SimpleSpinnerItem);
+            var arrayadapter = ArrayAdapter.CreateFromResource(this, Resource.Array.place_array,
+                Android.Resource.Layout.SimpleSpinnerItem);
             //SetDropDownViewResource is called to define the appearance for each item when the widget is opened (SimpleSpinItem is another standard layout defined by the platform)
             arrayadapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             //Finally, the ArrayAdapter is set to associate all of its items with the Spinner by setting the Adapter property 
@@ -100,6 +115,36 @@ namespace NZWeatherApp2
             //make a string to hold the city name so it appears in the toast message
             var toast = string.Format("The city is {0}", spinner.GetItemAtPosition(e.Position));
             Toast.MakeText(this, toast, ToastLength.Long).Show();
+        }
+
+        public void SaveText(string filename, string text)
+        {
+            //https://developer.xamarin.com/guides/xamarin-forms/working-with/files/
+            var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            var filePath = System.IO.Path.Combine(documentsPath, filename);
+            System.IO.File.WriteAllText(filePath, text);
+        }
+
+        public string ReadText(string filename)
+        {
+            //if the file exists then read from it
+            string text;
+            //set up the directory path and combine it with the file name
+            var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            var filePath = System.IO.Path.Combine(documentsPath, filename);
+            //if the file exists
+            if (File.Exists(filePath))
+            {
+                return System.IO.File.ReadAllText(filePath);
+            }
+            else
+            {
+                //otherwise throw a message
+                text = "";
+                Toast.MakeText(this, "No File", ToastLength.Short).Show();
+
+            }
+            return text;
         }
     }
 }
